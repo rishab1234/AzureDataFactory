@@ -1,0 +1,9 @@
+{
+	"name": "rishabadftesting",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f2274080-ca33-44f3-8236-fd6b7f929567",
+		"tenantId": "0602bdc1-a38a-4804-8e1a-e1e284486b82"
+	}
+}

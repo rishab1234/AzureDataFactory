@@ -1,0 +1,88 @@
+{
+	"name": "ErrorHandlinRow_DF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "inputcsvfile",
+						"type": "DatasetReference"
+					},
+					"name": "inputsource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable2",
+						"type": "DatasetReference"
+					},
+					"name": "incorrectdata"
+				},
+				{
+					"dataset": {
+						"referenceName": "AzureSqlTable4",
+						"type": "DatasetReference"
+					},
+					"name": "correctdata"
+				}
+			],
+			"transformations": [
+				{
+					"name": "errorrows"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          salesdate as string,",
+				"          salesitem as string,",
+				"          country as string,",
+				"          quantity as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> inputsource",
+				"inputsource split(isNull(toDate(salesdate,'dd-MMM-yyyy')),",
+				"     disjoint: false) ~> errorrows@(errordata, correctdata)",
+				"errorrows@correctdata derive(salesdate = toDate(salesdate, 'dd-MMM-yy'),",
+				"          quantity = toInteger(quantity)) ~> derivedColumn1",
+				"errorrows@errordata sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          salesdate as string,",
+				"          salesitem as string,",
+				"          country as string,",
+				"          quantity as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> incorrectdata",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          salesdate as date,",
+				"          salesitem as string,",
+				"          country as string,",
+				"          quantity as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> correctdata"
+			]
+		}
+	}
+}
