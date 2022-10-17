@@ -12,20 +12,47 @@
 					"name": "inputFixedLength"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "outputfixedlength",
+						"type": "DatasetReference"
+					},
+					"name": "fixedlengthoutput"
+				}
+			],
 			"transformations": [
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
 				"source(output(",
-				"          {1001Rishab    MH8898737434} as string",
+				"          Column_1 as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> inputFixedLength",
-				"inputFixedLength derive(Emp_id = ERROR_FUNCTION('')) ~> derivedColumn1"
+				"inputFixedLength derive(EMPID = substring(Column_1,1,4),",
+				"          EMP_NAME = substring(Column_1,5,10),",
+				"          state_code = substring(Column_1, 15,2),",
+				"          Mobile_no = substring(Column_1,17,10)) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          EMPID,",
+				"          EMP_NAME,",
+				"          state_code,",
+				"          Mobile_no",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     filePattern:('Fixed_Length_Output'),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> fixedlengthoutput"
 			]
 		}
 	}
