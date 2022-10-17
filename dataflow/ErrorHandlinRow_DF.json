@@ -5,10 +5,6 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "inputcsvfile",
-						"type": "DatasetReference"
-					},
 					"name": "inputsource"
 				}
 			],
@@ -40,6 +36,9 @@
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     filename as string ($filename)",
+				"}",
 				"source(output(",
 				"          salesdate as string,",
 				"          salesitem as string,",
@@ -47,8 +46,7 @@
 				"          quantity as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> inputsource",
+				"     validateSchema: false) ~> inputsource",
 				"inputsource split(isNull(toDate(salesdate,'dd-MMM-yyyy')),",
 				"     disjoint: false) ~> errorrows@(errordata, correctdata)",
 				"errorrows@correctdata derive(salesdate = toDate(salesdate, 'dd-MMM-yy'),",
