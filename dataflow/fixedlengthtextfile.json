@@ -1,0 +1,32 @@
+{
+	"name": "fixedlengthtextfile",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "inputfixedlength",
+						"type": "DatasetReference"
+					},
+					"name": "inputFixedLength"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {1001Rishab    MH8898737434} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> inputFixedLength",
+				"inputFixedLength derive(Emp_id = ERROR_FUNCTION('')) ~> derivedColumn1"
+			]
+		}
+	}
+}
