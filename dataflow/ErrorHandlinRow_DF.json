@@ -34,6 +34,9 @@
 				},
 				{
 					"name": "derivedColumn1"
+				},
+				{
+					"name": "AddFilenamedetails"
 				}
 			],
 			"scriptLines": [
@@ -50,7 +53,8 @@
 				"     disjoint: false) ~> errorrows@(errordata, correctdata)",
 				"errorrows@correctdata derive(salesdate = toDate(salesdate, 'dd-MMM-yy'),",
 				"          quantity = toInteger(quantity)) ~> derivedColumn1",
-				"errorrows@errordata sink(allowSchemaDrift: true,",
+				"errorrows@errordata derive(filename = 'salesdata') ~> AddFilenamedetails",
+				"AddFilenamedetails sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          salesdate as string,",
