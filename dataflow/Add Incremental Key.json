@@ -19,7 +19,15 @@
 					"name": "input"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sales_output",
+						"type": "DatasetReference"
+					},
+					"name": "dumpfile"
+				}
+			],
 			"transformations": [
 				{
 					"name": "addDummyColumn"
@@ -92,7 +100,20 @@
 				"     skipDuplicateMapOutputs: true) ~> selectedColumns",
 				"convertQuantityDataType, output union(byName: true)~> unionwithOutputFile",
 				"selectedColumns derive(quantity = toShort(quantity)) ~> convertQuantityDataType",
-				"unionwithOutputFile sort(asc(id, true)) ~> sortingWithID"
+				"unionwithOutputFile sort(asc(id, true)) ~> sortingWithID",
+				"sortingWithID sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Column_1 as string,",
+				"          Column_2 as string,",
+				"          Column_3 as string,",
+				"          Column_4 as string,",
+				"          Column_5 as string",
+				"     ),",
+				"     partitionFileNames:['SALESDATA_IN.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> dumpfile"
 			]
 		}
 	}
