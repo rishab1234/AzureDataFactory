@@ -67,6 +67,26 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Skipped"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "tempEmail",
+					"value": {
+						"value": "@join(variables('email'),';')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
