@@ -1,0 +1,77 @@
+{
+	"name": "SCD Upsert DF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "SCDInput",
+						"type": "DatasetReference"
+					},
+					"name": "BlobinputFile"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "SCD_Upsert",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "alterRow1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as integer,",
+				"          name as string,",
+				"          departid as integer,",
+				"          country as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> BlobinputFile",
+				"BlobinputFile alterRow(upsertIf(1==1)) ~> alterRow1",
+				"alterRow1 select(mapColumn(",
+				"          id = empid,",
+				"          name,",
+				"          department = departid,",
+				"          country",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as integer,",
+				"          name as string,",
+				"          department as integer,",
+				"          country as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['id'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id,",
+				"          name,",
+				"          department,",
+				"          country",
+				"     )) ~> sink1"
+			]
+		}
+	}
+}
