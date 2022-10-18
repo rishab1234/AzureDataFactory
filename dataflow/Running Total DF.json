@@ -1,0 +1,67 @@
+{
+	"name": "Running Total DF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "inputsales",
+						"type": "DatasetReference"
+					},
+					"name": "input"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "outputfile",
+						"type": "DatasetReference"
+					},
+					"name": "output"
+				}
+			],
+			"transformations": [
+				{
+					"name": "AddID"
+				},
+				{
+					"name": "RunningTotal"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          salesdate as string,",
+				"          salesitem as string,",
+				"          country as string,",
+				"          quantity as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> input",
+				"input keyGenerate(output(id as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> AddID",
+				"AddID window(asc(quantity, true),",
+				"     RunningTotalQuantity = sum(quantity)) ~> RunningTotal",
+				"RunningTotal select(mapColumn(",
+				"          id,",
+				"          salesdate,",
+				"          salesitem,",
+				"          country,",
+				"          quantity,",
+				"          RunningTotalQuantity",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> output"
+			]
+		}
+	}
+}
