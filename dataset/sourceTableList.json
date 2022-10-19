@@ -1,0 +1,60 @@
+{
+	"name": "sourceTableList",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "ErrorLogID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ErrorTime",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "UserName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ErrorNumber",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ErrorSeverity",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ErrorState",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ErrorProcedure",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ErrorLine",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "ErrorMessage",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "ErrorLog"
+		}
+	}
+}

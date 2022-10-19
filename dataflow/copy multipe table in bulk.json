@@ -1,0 +1,37 @@
+{
+	"name": "copy multipe table in bulk",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "sourceTableList",
+						"type": "DatasetReference"
+					},
+					"name": "DBTableList"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          ErrorLogID as integer,",
+				"          ErrorTime as timestamp,",
+				"          UserName as string,",
+				"          ErrorNumber as integer,",
+				"          ErrorSeverity as integer,",
+				"          ErrorState as integer,",
+				"          ErrorProcedure as string,",
+				"          ErrorLine as integer,",
+				"          ErrorMessage as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     query: 'select * from INFORMATION_SCHEMA.tables\\nwhere TABLE_TYPE = \\'BASE TABLE\\' and table_schema = \\'dbo\\'',",
+				"     format: 'query') ~> DBTableList"
+			]
+		}
+	}
+}
