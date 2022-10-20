@@ -1,0 +1,57 @@
+{
+	"name": "split single into multiple rows",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "skillinputforsplit",
+						"type": "DatasetReference"
+					},
+					"name": "skillsource"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "skilloutputsplit",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "flatten1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          empid as string,",
+				"          name as string,",
+				"          skills as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> skillsource",
+				"skillsource derive(skills = split(skills,',')) ~> derivedColumn1",
+				"derivedColumn1 foldDown(unroll(skills),",
+				"     mapColumn(",
+				"          empid,",
+				"          name,",
+				"          skills",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
