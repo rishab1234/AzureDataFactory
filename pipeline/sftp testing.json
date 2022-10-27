@@ -1,9 +1,9 @@
 {
-	"name": "sftp blob connection",
+	"name": "sftp testing",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Copy data from db",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -23,12 +23,14 @@
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
+							"type": "SftpWriteSettings",
+							"operationTimeout": "01:00:00",
+							"useTempFileRename": true
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
 							"quoteAllText": true,
-							"fileExtension": "file.csv"
+							"fileExtension": ".txt"
 						}
 					},
 					"enableStaging": false,
@@ -43,13 +45,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "AzureSqlTable1",
+						"referenceName": "sftpsourcetable",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "sftpblobdest",
+						"referenceName": "sftpdestination",
 						"type": "DatasetReference"
 					}
 				]

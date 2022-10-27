@@ -1,0 +1,22 @@
+{
+	"name": "sftpdestination",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Sftp1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "SftpLocation",
+				"folderPath": "/sftpfolder"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
