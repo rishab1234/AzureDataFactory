@@ -43,7 +43,7 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 derive(filename = country+'.csv') ~> derivedColumn1",
+				"source1 derive(filename = 'output/'+country+'.csv') ~> derivedColumn1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     rowUrlColumn:'filename',",
