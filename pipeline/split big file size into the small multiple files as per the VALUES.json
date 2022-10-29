@@ -1,5 +1,5 @@
 {
-	"name": "pipeline3",
+	"name": "split big file size into the small multiple files as per the VALUES",
 	"properties": {
 		"activities": [
 			{
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow1",
+						"referenceName": "split big file size into the small multiple files as per the VALUES",
 						"type": "DataFlowReference"
 					},
 					"compute": {

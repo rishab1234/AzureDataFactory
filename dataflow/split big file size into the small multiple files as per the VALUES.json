@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "split big file size into the small multiple files as per the VALUES",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
