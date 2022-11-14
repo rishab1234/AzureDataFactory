@@ -13,7 +13,17 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": [],
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "dbo.ErrorLog"
+					},
+					{
+						"name": "Destination",
+						"value": "adf-container/output/@{concat('DA_Accounts_',formatDateTime(utcNow(),'yyyyMMdd'),'.csv')}"
+					},
+					null
+				],
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
@@ -24,7 +34,8 @@
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
+							"type": "AzureBlobStorageWriteSettings",
+							"maxConcurrentConnections": 0
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
