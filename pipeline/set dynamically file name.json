@@ -21,8 +21,7 @@
 					{
 						"name": "Destination",
 						"value": "adf-container/output/@{concat('DA_Accounts_',formatDateTime(utcNow(),'yyyyMMdd'),'.csv')}"
-					},
-					null
+					}
 				],
 				"typeProperties": {
 					"source": {
